@@ -1,9 +1,11 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
+import React from "react";
+import { connect } from "react-redux";
+import { Formik, Form, Field } from "formik";
+import * as Yup from "yup";
+import axios from "axios";
+import routes from "../routes.js";
 
-import * as actions from '../actions/index.js';
+import * as actions from "../actions/index.js";
 
 const mapStateToProps = (state) => {
   const { currentChannelId } = state;
@@ -11,43 +13,62 @@ const mapStateToProps = (state) => {
     currentChannelId,
   };
   return props;
-}
+};
 
 const actionCreators = {
   addMessage: actions.addMessage,
-}
+};
 
 const SignupSchema = Yup.object().shape({
-  body: Yup.string().required('Required'),
+  body: Yup.string().required("Required"),
 });
 
-const NewMessageForm = ({ currentChannelId, addMessage }) => {
+const NewMessageForm = ({ currentChannelId, addMessage, author }) => {
   return (
-    <Formik 
-      initialValues={{ body: '' }}
+    <Formik
+      initialValues={{ body: "" }}
       validationSchema={SignupSchema}
       onSubmit={async (values, { resetForm }) => {
-        await new Promise((r) => setTimeout(r, 500));
-        alert(JSON.stringify(values, null, 2));
-
+        const request = {
+          data: {
+            attributes: {
+              author,
+              body: values.body,
+              channelId: currentChannelId,
+            },
+          },
+        };
+        addMessage(request);
+        
         resetForm();
       }}
     >
-    {({ isSubmitting }) => (
-      <Form noValidate="" className="" >
-        <div className="form-group">
-          <div className="input-group">
-            <Field type="text" name="body" aria-label="body" className="mr-2 form-control" placeholder="Enter your message"/>
-            <button aria-label="submit" type="submit" className="btn btn-primary" disabled={isSubmitting} >Submit</button>
-            <div className="d-block invalid-feedback">
-              &nbsp;
+      {({ isSubmitting }) => (
+        <Form noValidate="" className="">
+          <div className="form-group">
+            <div className="input-group">
+              <Field
+                type="text"
+                name="body"
+                aria-label="body"
+                className="mr-2 form-control"
+                placeholder="Enter your message"
+              />
+              <button
+                aria-label="submit"
+                type="submit"
+                className="btn btn-primary"
+                disabled={isSubmitting}
+              >
+                Submit
+              </button>
+              <div className="d-block invalid-feedback">&nbsp;</div>
             </div>
           </div>
-        </div>
-      </Form>
+        </Form>
       )}
     </Formik>
   );
-}
+};
 
 export default connect(mapStateToProps, actionCreators)(NewMessageForm);
