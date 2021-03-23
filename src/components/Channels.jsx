@@ -1,7 +1,7 @@
-import React from "react";
-import cn from "classnames";
-import { connect } from "react-redux";
-import * as actions from "../actions/index.js";
+import React from 'react';
+import cn from 'classnames';
+import { connect } from 'react-redux';
+import * as actions from '../actions/index.js';
 
 const mapStateToProps = (state) => {
   const { channels, currentChannelId } = state;
@@ -29,16 +29,16 @@ const Channels = ({ channels, currentChannelId, switchChannel }) => {
         </button>
       </div>
       <ul className="nav flex-column nav-pills nav-fill">
-        {channels.map(({ id, name, removable }) => {
-          const isCurrentChannel = id === currentChannelId ? true : false;
+        {channels.map(({ id, name }) => {
+          const isCurrentChannel = id === currentChannelId;
           const channelBtnClass = cn({
-            "nav-link": true,
-            "btn-block": true,
-            "mb-2": true,
-            "text-left": true,
+            'nav-link': true,
+            'btn-block': true,
+            'mb-2': true,
+            'text-left': true,
             btn: true,
-            "btn-primary": isCurrentChannel,
-            "btn-light": !isCurrentChannel,
+            'btn-primary': isCurrentChannel,
+            'btn-light': !isCurrentChannel,
           });
           return (
             <li key={id} className="nav-item">
