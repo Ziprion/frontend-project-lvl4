@@ -5,20 +5,17 @@ import axios from "axios";
 export const addChannel = createAction("CHANNEL_ADD");
 export const switchChannel = createAction("CHANNEL_SWITCH");
 export const addMessageSuccess = createAction("MESSAGE_ADD");
-export const addMessage = (request) => async (dispatch) => {
+export const addMessage = (message) => async () => {
   try {
     const {
       data: {
         attributes: { channelId },
       },
-    } = request;
+    } = message;
     const response = await axios.post(
       routes.channelMessagesPath(channelId),
-      request
+      message
     );
-    console.log(response);
-
-    dispatch(addMessageSuccess({ message: response.data }));
   } catch (e) {
     console.log(e);
     throw e;

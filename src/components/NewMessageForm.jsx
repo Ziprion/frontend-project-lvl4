@@ -2,9 +2,6 @@ import React from "react";
 import { connect } from "react-redux";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import axios from "axios";
-import routes from "../routes.js";
-
 import * as actions from "../actions/index.js";
 
 const mapStateToProps = (state) => {
@@ -28,8 +25,8 @@ const NewMessageForm = ({ currentChannelId, addMessage, author }) => {
     <Formik
       initialValues={{ body: "" }}
       validationSchema={SignupSchema}
-      onSubmit={async (values, { resetForm }) => {
-        const request = {
+      onSubmit={(values, { resetForm }) => {
+        const message = {
           data: {
             attributes: {
               author,
@@ -38,7 +35,7 @@ const NewMessageForm = ({ currentChannelId, addMessage, author }) => {
             },
           },
         };
-        addMessage(request);
+        addMessage(message);
         
         resetForm();
       }}

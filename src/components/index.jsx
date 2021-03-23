@@ -5,16 +5,15 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import reducers from "../reducers/index.js";
 import Channels from "./Channels.jsx";
 import Messages from "./Messages.jsx";
-import { io } from "socket.io-client";
 import thunk from 'redux-thunk';
 import faker from 'faker';
 
 
 const App = (gon) => {
-  const socket = io();
-  socket.onAny((event, ...args) => {
-    console.log(event, args);
-  });
+  
+  
+  
+
   const initState = gon;
   const randomName = faker.name.findName(); // Rowan Nikolaus
   console.log(randomName)
