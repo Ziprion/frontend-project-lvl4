@@ -25,11 +25,11 @@ const Messages = ({ messages, nickname, currentChannelId }) => (
             </div>
           ))}
       </div>
+      {}
       <div className="mt-auto">
         <NewMessageForm author={nickname} />
       </div>
     </div>
   </div>
 );
-
 export default connect(mapStateToProps)(Messages);

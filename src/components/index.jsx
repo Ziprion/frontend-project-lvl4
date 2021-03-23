@@ -12,7 +12,7 @@ import Messages from './Messages.jsx';
 import { addMessageSuccess } from '../actions/index.js';
 
 const App = (gon) => {
-  const randomName = faker.name.findName(); // Rowan Nikolaus
+  const randomName = faker.name.findName();
   const name = Cookies.get('name') === undefined ? Cookies.set('name', randomName, { expires: 1 }) : Cookies.get('name');
   const initState = gon;
   /* eslint-disable no-underscore-dangle */
@@ -36,6 +36,7 @@ const App = (gon) => {
       messageBox.scrollTop = messageBox.scrollHeight;
     });
   });
+
   ReactDOM.render(
     <div className="row h-100 pb-3">
       <Provider store={store}>
