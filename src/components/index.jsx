@@ -14,6 +14,7 @@ import { addMessageSuccess } from '../actions/index.js';
 const App = (gon) => {
   const randomName = faker.name.findName();
   const name = Cookies.get('name') === undefined ? Cookies.set('name', randomName, { expires: 1 }) : Cookies.get('name');
+  console.log(name)
   const initState = gon;
   /* eslint-disable no-underscore-dangle */
   const ext = window.__REDUX_DEVTOOLS_EXTENSION__;
