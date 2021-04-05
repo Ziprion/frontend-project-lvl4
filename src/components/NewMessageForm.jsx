@@ -61,8 +61,8 @@ class NewMessageForm extends React.Component {
                   data: message,
                   timeout: 4000,
                 });
-                setSubmitting(false);
                 resetForm();
+                setSubmitting(false);
                 myRef.current.focus();
               } catch (e) {
                 console.log(e);
