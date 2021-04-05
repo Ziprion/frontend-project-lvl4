@@ -34,7 +34,7 @@ class NewMessageForm extends React.Component {
   render() {
     const { currentChannelId } = this.props;
     const CustomInputComponent = (props) => (
-      <input ref={myRef} readOnly={props.readonly} type="text" aria-label="body" className={props.className} value={props.value} onChange={props.onChange} name="body" onBlur={props.onBlur} />
+      <input ref={myRef} disabled={props.disabled} readOnly={props.readonly} type="text" aria-label="body" className={props.className} value={props.value} onChange={props.onChange} name="body" onBlur={props.onBlur} />
     );
     return (
       <NameContext.Consumer>
@@ -55,17 +55,15 @@ class NewMessageForm extends React.Component {
                 },
               };
               try {
-                const res = await axios({
+                await axios({
                   method: 'post',
                   url: routes.channelMessagesPath(currentChannelId),
                   data: message,
-                  timeout: 3000,
+                  timeout: 4000,
                 });
-                console.log(res);
-                if (res.status === 201) {
-                  myRef.current.focus();
-                  resetForm();
-                }
+                setSubmitting(false);
+                resetForm();
+                myRef.current.focus();
               } catch (e) {
                 console.log(e);
                 throw e;
@@ -78,6 +76,7 @@ class NewMessageForm extends React.Component {
                   <Field
                     as={CustomInputComponent}
                     readonly={isSubmitting}
+                    disabled={isSubmitting}
                     name="body"
                     aria-label="body"
                     className={errors.body && touched.body ? 'form-control is-invalid' : 'form-control'}
