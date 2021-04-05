@@ -44,7 +44,7 @@ class NewMessageForm extends React.Component {
             validationSchema={SignupSchema}
             validateOnBlur={false}
             onSubmit={async (values, { resetForm, setSubmitting }) => {
-              setSubmitting(false);
+              setSubmitting(true);
               const message = {
                 data: {
                   attributes: {
@@ -57,6 +57,7 @@ class NewMessageForm extends React.Component {
               const res = await axios.post(routes.channelMessagesPath(currentChannelId), message);
               console.log(res);
               if (res.status === 201) {
+                myRef.current.focus();
                 resetForm();
               }
             }}
