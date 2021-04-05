@@ -10,6 +10,7 @@ import reducers from '../reducers/index.js';
 import Channels from './Channels.jsx';
 import Messages from './Messages.jsx';
 import { addMessageSuccess } from '../actions/index.js';
+import NameContext from './NameContext';
 
 const App = (gon) => {
   const randomName = faker.name.findName();
@@ -17,7 +18,6 @@ const App = (gon) => {
     Cookies.set('name', randomName, { expires: 1 });
   }
   const name = Cookies.get('name');
-  console.log(name)
   const initState = gon;
   /* eslint-disable no-underscore-dangle */
   const ext = window.__REDUX_DEVTOOLS_EXTENSION__;
@@ -40,12 +40,13 @@ const App = (gon) => {
       messageBox.scrollTop = messageBox.scrollHeight;
     });
   });
-
   ReactDOM.render(
     <div className="row h-100 pb-3">
       <Provider store={store}>
         <Channels />
-        <Messages nickname={name} />
+        <NameContext.Provider value={name}>
+          <Messages />
+        </NameContext.Provider>
       </Provider>
     </div>,
     document.getElementById('chat'),

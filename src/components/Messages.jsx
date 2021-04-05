@@ -11,7 +11,7 @@ const mapStateToProps = (state) => {
   return props;
 };
 
-const Messages = ({ messages, nickname, currentChannelId }) => (
+const Messages = ({ messages, currentChannelId }) => (
   <div className="col h-100">
     <div className="d-flex flex-column h-100">
       <div id="messages-box" className="chat-messages overflow-auto mb-3">
@@ -19,17 +19,20 @@ const Messages = ({ messages, nickname, currentChannelId }) => (
           .filter((message) => message.channelId === currentChannelId)
           .map(({ body, id, author }) => (
             <div key={id} className="text-break">
-              <b>{author}</b>
+              <b>
+                {author}
+              </b>
               :
               {body}
             </div>
           ))}
       </div>
-      {}
+      { }
       <div className="mt-auto">
-        <NewMessageForm author={nickname} />
+        <NewMessageForm />
       </div>
     </div>
   </div>
 );
+
 export default connect(mapStateToProps)(Messages);
