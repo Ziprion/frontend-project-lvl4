@@ -54,11 +54,21 @@ class NewMessageForm extends React.Component {
                   },
                 },
               };
-              const res = await axios.post(routes.channelMessagesPath(currentChannelId), message);
-              console.log(res);
-              if (res.status === 201) {
-                myRef.current.focus();
-                resetForm();
+              try {
+                const res = await axios({
+                  method: 'post',
+                  url: routes.channelMessagesPath(currentChannelId),
+                  data: message,
+                  timeout: 3000,
+                });
+                console.log(res);
+                if (res.status === 201) {
+                  myRef.current.focus();
+                  resetForm();
+                }
+              } catch (e) {
+                console.log(e);
+                throw e;
               }
             }}
           >
