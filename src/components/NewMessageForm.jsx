@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
+import axios from 'axios';
+import routes from '../routes.js';
 import * as actions from '../actions/index.js';
 import NameContext from './NameContext';
 
@@ -30,9 +32,9 @@ class NewMessageForm extends React.Component {
   }
 
   render() {
-    const { currentChannelId, addMessage } = this.props;
+    const { currentChannelId } = this.props;
     const CustomInputComponent = (props) => (
-      <input ref={myRef} type="text" aria-label="body" className={props.className} value={props.value} onChange={props.onChange} name="body" onBlur={props.onBlur} />
+      <input ref={myRef} readOnly={props.readonly} type="text" aria-label="body" className={props.className} value={props.value} onChange={props.onChange} name="body" onBlur={props.onBlur} />
     );
     return (
       <NameContext.Consumer>
@@ -41,7 +43,8 @@ class NewMessageForm extends React.Component {
             initialValues={{ body: '' }}
             validationSchema={SignupSchema}
             validateOnBlur={false}
-            onSubmit={(values, { resetForm }) => {
+            onSubmit={async (values, { resetForm, setSubmitting }) => {
+              setSubmitting(false);
               const message = {
                 data: {
                   attributes: {
@@ -51,8 +54,11 @@ class NewMessageForm extends React.Component {
                   },
                 },
               };
-              addMessage(message);
-              resetForm();
+              const res = await axios.post(routes.channelMessagesPath(currentChannelId), message);
+              console.log(res);
+              if (res.status === 201) {
+                resetForm();
+              }
             }}
           >
             {({ errors, touched, isSubmitting }) => (
@@ -60,6 +66,7 @@ class NewMessageForm extends React.Component {
                 <div className="input-group has-validation">
                   <Field
                     as={CustomInputComponent}
+                    readonly={isSubmitting}
                     name="body"
                     aria-label="body"
                     className={errors.body && touched.body ? 'form-control is-invalid' : 'form-control'}
