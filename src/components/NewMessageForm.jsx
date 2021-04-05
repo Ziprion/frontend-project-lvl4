@@ -12,62 +12,78 @@ const mapStateToProps = (state) => {
   };
   return props;
 };
-
 const actionCreators = {
   addMessage: actions.addMessage,
 };
-
 const SignupSchema = Yup.object().shape({
   body: Yup.string().required('Required'),
 });
+const myRef = React.createRef();
 
-const NewMessageForm = ({ currentChannelId, addMessage }) => (
-  <NameContext.Consumer>
-    {(author) => (
-      <Formik
-        initialValues={{ body: '' }}
-        validationSchema={SignupSchema}
-        onSubmit={(values, { resetForm }) => {
-          const message = {
-            data: {
-              attributes: {
-                author,
-                body: values.body,
-                channelId: currentChannelId,
-              },
-            },
-          };
-          addMessage(message);
-          resetForm();
-        }}
-      >
-        {({ errors, isSubmitting }) => (
-          <Form noValidate="" className="">
-            <div className="input-group has-validation">
-              <Field
-                name="body"
-                aria-label="body"
-                className={errors.body ? 'form-control is-invalid' : 'form-control'}
-              />
-              <div className="input-group-append">
-                <button
-                  aria-label="submit"
-                  type="submit"
-                  className="btn btn-primary"
-                  disabled={isSubmitting}
-                >
-                  Submit
-                </button>
-              </div>
-              <div className="invalid-feedback">
-                {errors.body ? 'Required' : null}
-              </div>
-            </div>
-          </Form>
+class NewMessageForm extends React.Component {
+  componentDidMount() {
+    myRef.current.focus();
+  }
+
+  componentDidUpdate() {
+    myRef.current.focus();
+  }
+
+  render() {
+    const { currentChannelId, addMessage } = this.props;
+    const CustomInputComponent = (props) => (
+      <input ref={myRef} type="text" aria-label="body" className={props.className} value={props.value} onChange={props.onChange} name="body" onBlur={props.onBlur} />
+    );
+    return (
+      <NameContext.Consumer>
+        {(author) => (
+          <Formik
+            initialValues={{ body: '' }}
+            validationSchema={SignupSchema}
+            validateOnBlur={false}
+            onSubmit={(values, { resetForm }) => {
+              const message = {
+                data: {
+                  attributes: {
+                    author,
+                    body: values.body,
+                    channelId: currentChannelId,
+                  },
+                },
+              };
+              addMessage(message);
+              resetForm();
+            }}
+          >
+            {({ errors, touched, isSubmitting }) => (
+              <Form noValidate="" className="">
+                <div className="input-group has-validation">
+                  <Field
+                    as={CustomInputComponent}
+                    name="body"
+                    aria-label="body"
+                    className={errors.body && touched.body ? 'form-control is-invalid' : 'form-control'}
+                  />
+                  <div className="input-group-append">
+                    <button
+                      aria-label="submit"
+                      type="submit"
+                      className="btn btn-primary"
+                      disabled={isSubmitting}
+                    >
+                      Submit
+                    </button>
+                  </div>
+                  <div className="invalid-feedback">
+                    {errors.body && touched.body ? 'Required' : null}
+                  </div>
+                </div>
+              </Form>
+            )}
+          </Formik>
         )}
-      </Formik>
-    )}
-  </NameContext.Consumer>
-);
-
+      </NameContext.Consumer>
+    );
+  }
+}
 export default connect(mapStateToProps, actionCreators)(NewMessageForm);
