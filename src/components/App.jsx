@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import faker from 'faker';
 import Cookies from 'js-cookie';
 import Channels from './Channels.jsx';
@@ -12,31 +12,28 @@ if (Cookies.get('name') === undefined) {
 }
 const name = Cookies.get('name');
 
-class App extends React.Component {
-  componentDidMount() {
+const App = () => {
+  useEffect(() => {
     const messageBox = document.getElementById('messages-box');
     messageBox.scrollTop = messageBox.scrollHeight;
-  }
-
-  render() {
-    return (
-      <div className="row h-100 pb-3">
-        <Channels />
-        <div className="col h-100">
-          <div className="d-flex flex-column h-100">
-            <div id="messages-box" className="chat-messages overflow-auto mb-3">
-              <Messages />
-            </div>
-            <div className="mt-auto">
-              <NameContext.Provider value={name}>
-                <NewMessageForm />
-              </NameContext.Provider>
-            </div>
+  });
+  return (
+    <div className="row h-100 pb-3">
+      <Channels />
+      <div className="col h-100">
+        <div className="d-flex flex-column h-100">
+          <div id="messages-box" className="chat-messages overflow-auto mb-3">
+            <Messages />
+          </div>
+          <div className="mt-auto">
+            <NameContext.Provider value={name}>
+              <NewMessageForm />
+            </NameContext.Provider>
           </div>
         </div>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default App;

@@ -5,7 +5,9 @@ import thunk from 'redux-thunk';
 import { createStore, applyMiddleware, compose } from 'redux';
 import { io } from 'socket.io-client';
 import reducers from '../reducers/index.js';
-import { addMessageSuccess } from '../actions/index.js';
+import {
+  addMessageSuccess, addChannelSuccess, renameChannel, removeChannel,
+} from '../actions/index.js';
 import App from './App.jsx';
 
 const chat = (gon) => {
@@ -29,6 +31,15 @@ const chat = (gon) => {
       store.dispatch(addMessageSuccess({ msg }));
       const messageBox = document.getElementById('messages-box');
       messageBox.scrollTop = messageBox.scrollHeight;
+    });
+    socket.on('newChannel', (msg) => {
+      store.dispatch(addChannelSuccess({ msg }));
+    });
+    socket.on('renameChannel', (msg) => {
+      store.dispatch(renameChannel({ msg }));
+    });
+    socket.on('removeChannel', (msg) => {
+      store.dispatch(removeChannel({ msg }));
     });
   });
   ReactDOM.render(
